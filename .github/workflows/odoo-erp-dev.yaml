@@ -42,7 +42,12 @@ jobs:
 
     - name: Get development release version
       id: release_version
-      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      # run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      run: |
+        # Extract the version from the GITHUB_REF
+        VERSION=${GITHUB_REF##*/}
+        echo "VERSION=${VERSION}" >> $GITHUB_ENV
+        echo "::set-output name=VERSION::${VERSION}"
   
     - name: Build and push
       uses: docker/build-push-action@v5
