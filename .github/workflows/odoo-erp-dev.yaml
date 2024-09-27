@@ -1,9 +1,13 @@
 name: dev build/deploy
 
 on:
-  release:
-    types:
-      - released
+  push:
+    branches:
+      - main
+    tags-ignore:
+      # Ignore all tags as we do not want
+      # to trigger this workflow by a release.
+      - "**"
 env:
   KUSTOMIZE_PATH: ".infra"
   PROJECTNAME: "odoo-erp"
