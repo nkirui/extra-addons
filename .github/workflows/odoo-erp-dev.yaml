@@ -11,7 +11,7 @@ on:
       # to trigger this workflow by a release.
       - "**"
 env:
-  KUSTOMIZE_PATH: ".infra"
+  KUSTOMIZE_PATH: ".infra/odoo"
   PROJECTNAME: "odoo-erp"
 jobs:  
   build:
@@ -87,7 +87,7 @@ jobs:
       run: |
        cd ${{ env.KUSTOMIZE_PATH }}       
        kustomize edit set image "${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECTNAME }}:${{ needs.build.outputs.VERSION }}"
-       kustomize build ./ > $(pwd)/release/manifests.yaml
+       kustomize build .
        cat kustomization.yaml
     
     - name: Commit release tag to the repo
