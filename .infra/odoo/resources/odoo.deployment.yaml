@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+spec:
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: odoo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: odoo
+    spec:
+      containers:
+        - image: nkirui2030/odoo17:latest
+          name: odoo
+          env:
+          - name: HOST
+            value: postgres
+          - name: USER
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_USER
+          - name: PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_PASSWORD
+          - name: DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_DB  
+          securityContext:
+            privileged: true
+            runAsUser: 0      
+          ports:
+            - containerPort: 8069
+              name: http-web-svc
+          volumeMounts:
+          - name: odoo-default-apps
+            mountPath: /var/lib/odoo
+          # resources:
+          #   requests:
+          #     cpu: "500m"
+          #     memory: "1Gi"
+          #   limits:
+          #     cpu: "1"
+          #     memory: "2Gi"
+      volumes:
+      - name: odoo-default-apps
+        persistentVolumeClaim:
+          claimName: odoo-default-pvc      
+  
