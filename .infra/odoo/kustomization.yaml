@@ -4,3 +4,6 @@ resources:
 - resources/odoo-svc.service.yaml
 - resources/odoo.deployment.yaml
 - resources/pvc.yaml
+images:
+- name: nkirui2030/odoo-erp
+  newTag: main
