@@ -1,0 +1,12 @@
+# Base image
+FROM odoo:17.0
+
+# Copy local files to the image
+COPY ./requirements.txt /mnt/extra-addons/requirements.txt
+
+RUN set -e; \
+    pip install --no-cache-dir -r /mnt/extra-addons/requirements.txt
+
+COPY ./addons-extra  /mnt/extra-addons
+COPY ./config.dev /etc/odoo
+
