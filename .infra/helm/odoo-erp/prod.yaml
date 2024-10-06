@@ -1,0 +1,8 @@
+image:
+  repository: nkirui2030/odoo17
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+deployment:
+  force: true
