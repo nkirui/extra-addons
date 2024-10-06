@@ -6,10 +6,8 @@ on:
   push:
     branches:
       - product
-    tags-ignore:
-      # Ignore all tags as we do not want
-      # to trigger this workflow by a release.
-      - "**"
+    paths:
+      - '17.0/**'
 env:
   KUSTOMIZE_PATH: ".infra/odoo"
   PROJECTNAME: "odoo-erp"
@@ -54,7 +52,7 @@ jobs:
       with:
         push: true
         file: 17.0/Dockerfile
-        tags: "nkirui2030/${{ env.PROJECTNAME }}, nkirui2030/${{ env.PROJECTNAME }}:${{ steps.release_version.outputs.VERSION }}"
+        tags: "nkirui2030/${{ env.PROJECTNAME }}:latest, nkirui2030/${{ env.PROJECTNAME }}:${{ github.sha }}"
 
         build-args: |
             VERSION=${{ steps.release_version.outputs.VERSION }}
@@ -64,7 +62,7 @@ jobs:
     - name: Print image tag & digest
       run: |
         echo "digest : ${{ steps.docker_build.outputs.digest }}"
-        echo "tag    : ${{ steps.release_version.outputs.VERSION }}"
+        echo "tag    : ${{ github.sha }}"
  
   deploy:
     name: Update k8s
@@ -80,12 +78,12 @@ jobs:
 
     - name: Push release tag to config repository
       run: |
-        echo ${{ needs.build.outputs.VERSION  }} > .infra/helm/odoo-erp/crds/vcs/tag
+        echo ${{ github.sha }} > .infra/helm/odoo-erp/crds/vcs/tag
         git config user.name $(git log -n 1 --pretty=format:%an)
         git config user.email $(git log -n 1 --pretty=format:%ae)
         git pull origin product
         git add .infra/helm/odoo-erp/crds/vcs/tag
-        git commit .infra/helm/odoo-erp/crds/vcs/tag -m "odoo ${{ needs.build.outputs.VERSION  }}"
+        git commit .infra/helm/odoo-erp/crds/vcs/tag -m "odoo ${{ github.sha }}"
         git push origin product 
     
     # - name: Setup Kustomize
