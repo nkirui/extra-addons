@@ -103,4 +103,5 @@ Thumbs.db
 # VS Code
 # .vscode/
 shared_postgres_data
-17.0/src/odoo
+17.0/src
+17.0/src.bkb
