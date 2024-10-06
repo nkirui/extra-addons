@@ -5,7 +5,7 @@ name: stg build/deploy
 on:
   push:
     branches:
-      - main
+      - test
     tags-ignore:
       # Ignore all tags as we do not want
       # to trigger this workflow by a release.
