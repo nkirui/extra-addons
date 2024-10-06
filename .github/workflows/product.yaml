@@ -1,6 +1,6 @@
 
 # product branch
-name: prod build/deploy
+name: product build/deploy
 
 on:
   pull_request:
