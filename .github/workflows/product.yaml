@@ -6,8 +6,8 @@ on:
   push:
     branches:
       - product
-    paths:
-      - '17.0/**'
+    paths-ignore:
+      - '.infra/helm/odoo-erp/crds/**'
 env:
   KUSTOMIZE_PATH: ".infra/odoo"
   PROJECTNAME: "odoo-erp"
