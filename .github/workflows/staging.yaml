@@ -6,10 +6,8 @@ on:
   push:
     branches:
       - main
-    tags-ignore:
-      # Ignore all tags as we do not want
-      # to trigger this workflow by a release.
-      - "**"
+    paths-ignore:
+      - '.infra/helm/odoo-erp/crds/**'
 env:
   KUSTOMIZE_PATH: ".infra/odoo"
   PROJECTNAME: "odoo-erp"
@@ -80,12 +78,12 @@ jobs:
 
     - name: Push release tag to config repository
       run: |
-        echo ${{ needs.build.outputs.VERSION  }} > .infra/helm/odoo-erp/crds/vcs/tag
+        echo ${{ needs.build.outputs.VERSION  }} > .infra/helm/odoo-erp/crds/vcs/hash
         git config user.name $(git log -n 1 --pretty=format:%an)
         git config user.email $(git log -n 1 --pretty=format:%ae)
         git pull origin main
-        git add .infra/helm/odoo-erp/crds/vcs/tag
-        git commit .infra/helm/odoo-erp/crds/vcs/tag -m "odoo ${{ needs.build.outputs.VERSION  }}"
+        git add .infra/helm/odoo-erp/crds/vcs/hash
+        git commit .infra/helm/odoo-erp/crds/vcs/hash -m "odoo ${{ needs.build.outputs.VERSION  }}"
         git push origin HEAD 
     
     # - name: Setup Kustomize
