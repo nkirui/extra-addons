@@ -1,4 +1,4 @@
-# Base image
+# Base image, odoo 17
 FROM odoo:17.0
 
 # Copy local files to the image
